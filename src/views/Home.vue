@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <div class="row">
-      <div class="col-sm-4"><button class="btn btn-primary" @click="sort('asc')">升幂</button></div>
+    <div class="row sticky-top ">
+      <div class="col-sm-4"><button class="btn btn-primary shadow" @click="sort('asc')">升幂</button></div>
       <div class="col-sm-4">
-        <button class="btn btn-primary" @click="sort('desc')">降幂</button>
+        <button class="btn btn-primary shadow" @click="sort('desc')">降幂</button>
       </div>
       <div class="col-sm-4">
-        <button class="btn btn-warning" @click="$bvModal.show(addModalOptions.id)">新增</button>
+        <button class="btn btn-warning shadow" @click="$bvModal.show(addModalOptions.id)">新增</button>
       </div>
     </div>
     <div class="row">
@@ -59,170 +59,8 @@ export default {
         edit: '編輯',
         delete: 'X',
       },
-      data: [],
       // 傳入資料
-      // data: [
-      //   {
-      //     id: '1',
-      //     title: 'sdf',
-      //     datetime: '2021/03/30',
-      //     name: 'Alexandra Jast',
-      //     email: 'Delpha.Ratke@yahoo.com',
-      //     bref: 'Et sed enim qui in id cupiditate eveniet quo sint.',
-      //   },
-      //   {
-      //     id: '2',
-      //     title: 'error-quod-ducimus',
-      //     datetime: '2021/03/04',
-      //     name: 'Mrs. Jo Satterfield',
-      //     email: 'Noemi_Vandervort@yahoo.com',
-      //     bref: 'Odit ut quaerat voluptatem provident ullam hic.',
-      //   },
-      //   {
-      //     id: '3',
-      //     title: 'nam-enim-quam',
-      //     datetime: '2021/03/12',
-      //     name: 'Brett Nikolaus',
-      //     email: 'Earnest.Conroy94@gmail.com',
-      //     bref: 'Et id voluptatem iusto a laboriosam fuga.',
-      //   },
-      //   {
-      //     id: '4',
-      //     title: 'ea-laboriosam-quas',
-      //     datetime: '2021/03/03',
-      //     name: 'Josefina Simonis',
-      //     email: 'Abigail5@hotmail.com',
-      //     bref: 'Sint recusandae hic et tempore.',
-      //   },
-      //   {
-      //     id: '5',
-      //     title: 'aperiam-autem-dolores',
-      //     datetime: '2021/03/10',
-      //     name: 'Jonathon Wehner',
-      //     email: 'Trent_Bernhard@hotmail.com',
-      //     bref: 'Laboriosam incidunt molestiae omnis assumenda et perspiciatis dolore.',
-      //   },
-      //   {
-      //     id: '11',
-      //     title: 'minus-non-rerum',
-      //     datetime: '2021/03/07',
-      //     name: 'Jana Mayer',
-      //     email: 'Declan98@gmail.com',
-      //     bref: 'Molestiae iusto vero adipisci deserunt dolorem et voluptas aspernatur maiores.',
-      //   },
-      //   {
-      //     id: '12',
-      //     title: 'magni-qui-quod',
-      //     datetime: '2021/03/28',
-      //     name: 'Ernesto Rau',
-      //     email: 'Danial14@hotmail.com',
-      //     bref: 'Provident dolorem nulla aut ut dicta repellat et.',
-      //   },
-      //   {
-      //     id: '13',
-      //     title: 'quia-qui-ducimus',
-      //     datetime: '2021/03/08',
-      //     name: 'Rickey Gulgowski',
-      //     email: 'Delphia_Lynch@yahoo.com',
-      //     bref: 'Dolorem quis culpa esse nulla.',
-      //   },
-      //   {
-      //     id: '14',
-      //     title: 'minus-eaque-ullam',
-      //     datetime: '2021/03/27',
-      //     name: 'Sandra Wehner',
-      //     email: 'Mckenna42@hotmail.com',
-      //     bref: 'Aut quia enim et dicta.',
-      //   },
-      //   {
-      //     id: '15',
-      //     title: 'fuga-dolorem-vero',
-      //     datetime: '2021/03/25',
-      //     name: 'Miss Glenn Bahringer',
-      //     email: 'Loraine_Donnelly@yahoo.com',
-      //     bref: 'Qui qui placeat optio.',
-      //   },
-      //   {
-      //     id: '6',
-      //     title: 'autem-omnis-aut',
-      //     datetime: '2021/03/16',
-      //     name: 'Miss Chad Bins',
-      //     email: 'Kenna.McGlynn1@gmail.com',
-      //     bref: 'Sed enim et in nihil nihil a nihil.',
-      //   },
-      //   {
-      //     id: '7',
-      //     title: 'cum-tempora-a',
-      //     datetime: '2021/03/05',
-      //     name: 'Luis Reichel',
-      //     email: 'Kyra98@yahoo.com',
-      //     bref: 'Qui omnis aliquam qui adipisci.',
-      //   },
-      //   {
-      //     id: '8',
-      //     title: 'aut-molestias-voluptatem',
-      //     datetime: '2021/03/29',
-      //     name: 'Winston Parisian',
-      //     email: 'Tyson_Bashirian@hotmail.com',
-      //     bref: 'Quo illo in iure asperiores impedit eligendi architecto eaque.',
-      //   },
-      //   {
-      //     id: '9',
-      //     title: 'assumenda-facilis-esse',
-      //     datetime: '2021/03/12',
-      //     name: 'Fannie Ryan',
-      //     email: 'Gerald.Towne43@yahoo.com',
-      //     bref: 'Atque omnis nihil quo earum vero enim possimus.',
-      //   },
-      //   {
-      //     id: '10',
-      //     title: 'perferendis-aspernatur-ullam',
-      //     datetime: '2021/03/03',
-      //     name: 'Yolanda Ziemann',
-      //     email: 'Chauncey_Kirlin88@yahoo.com',
-      //     bref: 'Quis dolorem asperiores atque laborum quos.',
-      //   },
-      //   {
-      //     id: '16',
-      //     title: 'quisquam-quibusdam-sit',
-      //     datetime: '2021/03/13',
-      //     name: 'Stacey Boyle',
-      //     email: 'Jaylon80@yahoo.com',
-      //     bref: 'Rerum dolor ad cupiditate et fuga.',
-      //   },
-      //   {
-      //     id: '17',
-      //     title: 'sit-expedita-ipsum',
-      //     datetime: '2021/03/03',
-      //     name: 'Lonnie Parisian',
-      //     email: 'Rafael68@yahoo.com',
-      //     bref: 'Vel corporis dolores eum laborum.',
-      //   },
-      //   {
-      //     id: '18',
-      //     title: 'est-omnis-vel',
-      //     datetime: '2021/03/03',
-      //     name: 'Faye Wolf',
-      //     email: 'Emerson45@yahoo.com',
-      //     bref: 'Ipsa quia dolores ea dolorum ullam non possimus magnam.',
-      //   },
-      //   {
-      //     id: '19',
-      //     title: 'inventore-dolorem-dolores',
-      //     datetime: '2021/03/28',
-      //     name: 'Eduardo Walker',
-      //     email: 'Jamison81@gmail.com',
-      //     bref: 'Ea enim ut totam modi facere sed.',
-      //   },
-      //   {
-      //     id: '20',
-      //     title: 'sint-debitis-sapiente',
-      //     datetime: '2021/03/16',
-      //     name: 'Nathaniel Dietrich',
-      //     email: 'Fae15@hotmail.com',
-      //     bref: 'Porro itaque illum nisi dolores nulla beatae sequi nesciunt quae.',
-      //   },
-      // ],
+      data: [],
     };
 
     // 新增彈窗表單選項
@@ -232,6 +70,7 @@ export default {
       mode: 'add',
       okTitle: '儲存',
       cancelTitle: '取消',
+      headerClass: 'even',
       labels: {
         title: '事件標題',
         name: '事件負責人',
@@ -253,6 +92,7 @@ export default {
       mode: 'edit',
       okTitle: '儲存',
       cancelTitle: '取消',
+      headerClass: '',
       labels: {
         title: '事件標題',
         name: '事件負責人',
@@ -278,17 +118,22 @@ export default {
       targetId: '',
     };
 
+    let _url = '';
+
     // 回傳
     return {
       timelineOptions,
       addModalOptions,
       editModalOptions,
       deleteModalOptions,
+      _url,
     };
   },
   //#endregion
   mounted: function () {
-    this.axios.get('/api/events').then((res) => {
+    this._url = '/activity/record';
+    let _url = this._url;
+    this.axios.get(_url).then((res) => {
       this.timelineOptions.data = res.data.data;
       this.$refs.ActivityTimeline.setOpt(this.timelineOptions);
     });
@@ -298,9 +143,11 @@ export default {
   methods: {
     //#region --- Callback ---
     onEdit(id) {
-      this.timelineOptions.data.forEach((x) => {
+      this.timelineOptions.data.forEach((x, i) => {
         if (x.id == id) {
           this.editModalOptions.editTarget = x;
+          if (i % 2 == 0) this.editModalOptions.headerClass = 'odd';
+          else this.editModalOptions.headerClass = 'even';
         }
       });
       this.$bvModal.show(this.editModalOptions.id);
@@ -330,14 +177,63 @@ export default {
      */
     addNewData(data) {
       // 時間軸套件方法
-      this.$refs.ActivityTimeline.addData(data);
+      let _this = this.$refs.ActivityTimeline;
+      let url = this._url;
+      //post data
+      this.axios
+        .post(url, {
+          title: data.title,
+          name: data.name,
+          datetime: data.datetime,
+          email: data.email,
+          bref: data.bref,
+        })
+        .then(function (response) {
+          //add
+          _this.addData(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     editNewData(data) {
       // 時間軸套件方法
-      this.$refs.ActivityTimeline.updateData(data);
+      let _this = this.$refs.ActivityTimeline;
+      let url = this._url;
+      // put data
+      this.axios
+        .put(url + '/' + data.id, {
+          title: data.title,
+          name: data.name,
+          email: data.email,
+          bref: data.bref,
+        })
+        .then(function (response) {
+          if (response.status && response.status === 200) {
+            // edit with new data
+            _this.updateData(response.data);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     deleteDataByID(id) {
-      this.$refs.ActivityTimeline.deleteData(id);
+      let _this = this.$refs.ActivityTimeline;
+      let url = this._url;
+
+      // delete data
+      this.axios
+        .delete(url + '/' + id)
+        .then(function (response) {
+          if (response.status && response.status === 200) {
+            // delete target by id
+            _this.deleteData(id);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
   //#endregion

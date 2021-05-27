@@ -22,8 +22,8 @@
           </p>
         </div>
         <div class="card-footer">
-          <button class="btn btn-dark" @click="onEdit(card.id)">Edit</button>
-          <button class="btn btn-danger" @click="onDelete(card.id)">X</button>
+          <button class="btn btn-dark" @click="onEdit(card.id)"> {{options.lables.edit}} </button>
+          <button class="btn btn-danger" @click="onDelete(card.id)"> {{options.lables.delete }} </button>
           <p class="card-text text-muted">{{ card.datetime }}</p>
         </div>
       </div>
@@ -58,8 +58,8 @@ export default {
       default: {
         perItem: 4,
         lables: {
-          loadMoreText: '載入更多',
-          edit: '編輯',
+          loadMoreText: 'Load More',
+          edit: 'Edit',
           delete: 'X',
         },
         data: [],
@@ -83,11 +83,20 @@ export default {
   //#endregion
   //#region === HOOKS ===
   mounted() {
-    this.itemLen = this.options.perItem;
+    this.itemLen = this._options.perItem;
     this.sort(this.sortType);
     this.render();
   },
   //#endregion
+  computed: {
+    _options: {
+      get(){
+        return this.options;
+      },
+      set(opt){
+      return opt;}
+    }
+  },
   //#region === METHODS ===
   methods: {
     //#region Callback函式
@@ -109,7 +118,7 @@ export default {
           return target;
         };
 
-        this.options = this.options = assign({}, this.options, true && options);
+        this._options = this._options = assign({}, this._options, true && options);
         this.sort(this.sortType);
         this.render();
     },
@@ -128,20 +137,9 @@ export default {
      * @param {Object} [card] - (card物件)
      */
     addData: function (card) {
-      // 計算最大Id
-      if (this.maxIdstr == '0') {
-        this.options.data.forEach((x) => {
-          if (parseInt(x.id) > parseInt(this.maxIdstr)) this.maxIdstr = x.id;
-        });
-      }
-      let maxId = parseInt(this.maxIdstr) + 1;
-      this.maxIdstr = maxId.toString();
-
-      // 設定新Id
-      card.id = this.maxIdstr;
 
       // 新增card資訊進入data
-      this.options.data.unshift(card);
+      this._options.data.unshift(card);
 
       // 重新渲染
       this.render();
@@ -149,13 +147,13 @@ export default {
 
     updateData: function (card) {
       let index = 0;
-      this.options.data.forEach((x, i) => {
+      this._options.data.forEach((x, i) => {
         if (x.id == card.id) {
           index = i;
         }
       });
 
-      this.options.data.splice(index, 1, card);
+      this._options.data.splice(index, 1, card);
 
       // 重新渲染
       this.render();
@@ -163,13 +161,13 @@ export default {
 
     deleteData: function (id) {
       let index = 0;
-      this.options.data.forEach((x, i) => {
+      this._options.data.forEach((x, i) => {
         if (x.id == id) {
           index = i;
         }
       });
 
-      this.options.data.splice(index, 1);
+      this._options.data.splice(index, 1);
 
       // 重新渲染
       this.render();
@@ -182,7 +180,7 @@ export default {
      * desc: 大至小
      */
     sort: function (type) {
-      let _data = this.options.data;
+      let _data = this._options.data;
       this.sortType = type;
       switch (type) {
         case 'asc':
@@ -209,15 +207,15 @@ export default {
      * 渲染時間軸
      */
     render: function () {
-      this.cards = this.options.data.slice(0, this.itemLen);
+      this.cards = this._options.data.slice(0, this.itemLen);
     },
     /**
      * 載入更多卡片
      */
     loadMoreCards: function () {
       // 計算載入數量
-      this.itemLen += this.options.perItem;
-      if (this.itemLen > this.options.data.length) this.itemLen = this.options.data.length;
+      this.itemLen += this._options.perItem;
+      if (this.itemLen > this._options.data.length) this.itemLen = this._options.data.length;
 
       // 重新渲染
       this.render();

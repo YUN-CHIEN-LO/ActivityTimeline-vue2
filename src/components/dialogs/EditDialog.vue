@@ -6,19 +6,21 @@
     :title="options.title"
     :cancel-title="options.cancelTitle"
     :ok-title="options.okTitle"
+    :header-class="options.headerClass"
     @show="resetModal"
     @hidden="resetModal"
     @ok="handleOk"
   >
     <form ref="form" @submit.prevent="handleSubmit">
       <!-- date -->
-      <p>{{ nowDate }}</p>
+      <p>{{ showDate }}</p>
       <!-- title -->
       <b-form-group
         :label="options.labels.title"
         label-for="title-input"
         :invalid-feedback="options.invalidFeedback.title"
         :state="newData.state.title"
+        class="mb-3"
       >
         <b-form-input
           id="title-input"
@@ -34,6 +36,7 @@
         label-for="name-input"
         :invalid-feedback="options.invalidFeedback.name"
         :state="newData.state.name"
+        class="mb-3"
       >
         <b-form-input
           id="name-input"
@@ -49,6 +52,7 @@
         label-for="email-input"
         :invalid-feedback="options.invalidFeedback.email"
         :state="newData.state.email"
+        class="mb-3"
       >
         <b-form-input
           id="email-input"
@@ -62,7 +66,13 @@
 
       <!-- bref -->
       <b-form-group :label="options.labels.bref" label-for="bref-input">
-        <b-form-textarea id="email-input" v-model="newData.bref" ref="bref"></b-form-textarea>
+        <b-form-textarea
+          id="email-input"
+          rows="3"
+          max-rows="6"
+          v-model="newData.bref"
+          ref="bref"
+        ></b-form-textarea>
       </b-form-group>
     </form>
   </b-modal>
@@ -72,10 +82,6 @@
 export default {
   name: 'EditDialog',
   props: {
-    maxId: {
-      type: Number,
-      default: 0,
-    },
     options: {
       type: Object,
       default: {
@@ -89,11 +95,6 @@ export default {
     ReturnNewData: (Data) => {
       return Data;
     },
-  },
-  mounted() {
-    // 設定今日時間
-    const now = this.$dateFormatSlash(new Date());
-    this.nowDate = now;
   },
   data() {
     let newData = {
@@ -111,13 +112,8 @@ export default {
     };
     return {
       newData,
-      nowDate: '',
+      showDate: '',
     };
-  },
-  computed: {
-    countMaxId: function () {
-      return parseInt(this.maxId) + 1;
-    },
   },
   methods: {
     checkFormValidity(item) {
@@ -136,6 +132,7 @@ export default {
               }
             }
           }
+          this.showDate = this.$dateFormatSlash(new Date());
           break;
         case 'edit':
           for (const [key, value] of Object.entries(this.newData)) {
@@ -147,6 +144,7 @@ export default {
               }
             }
           }
+          this.showDate = this.$dateFormatSlash(this.options.editTarget.datetime);
           break;
         default:
           break;
@@ -166,16 +164,33 @@ export default {
       if (!this.newData.state.title || !this.newData.state.name || !this.newData.state.email) {
         return;
       }
+      let data = null;
+      switch (this.options.mode) {
+        case 'add':
+          // 建立新Data物件
+          data = {
+            id: this.newData.id,
+            title: this.newData.title,
+            datetime: this.nowDate,
+            name: this.newData.name,
+            email: this.newData.email,
+            bref: this.newData.bref,
+          };
+          break;
+        case 'edit':
+          data = {
+            id: this.newData.id,
+            title: this.newData.title,
+            datetime: this.options.editTarget.datetime,
+            name: this.newData.name,
+            email: this.newData.email,
+            bref: this.newData.bref,
+          };
+          break;
+        default:
+          break;
+      }
 
-      // 建立新Data物件
-      let data = {
-        id: this.newData.id,
-        title: this.newData.title,
-        datetime: this.nowDate,
-        name: this.newData.name,
-        email: this.newData.email,
-        bref: this.newData.bref,
-      };
       // 新增data
       this.$emit('ReturnNewData', data);
       // Hide the modal manually
@@ -187,14 +202,26 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" >
 .close {
   background-color: transparent;
   border-radius: 5px;
   border: none;
   font-size: 24px;
+  color: white;
   &:hover {
     font-weight: bold;
   }
 }
+$oddColor: #22ac38;
+$evenColor: #f8b500;
+.odd {
+    background-color: $oddColor;
+    color: white;
+  }
+.even {
+    background-color: $evenColor;
+    color: white;
+  }
+
 </style>

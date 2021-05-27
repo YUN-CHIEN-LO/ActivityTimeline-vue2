@@ -18,8 +18,10 @@ Mock.mock(_url, 'get', (option) => {
 // 新增資料
 Mock.mock(_url, 'post', function(option) {
     let req = JSON.parse(option.body);
-    maxId++;
-    const newID = maxId;
+    data.data.forEach((x) => {
+        if (x.id > maxId) maxId = x.id;
+    });
+    const newID = maxId + 1;
     const newData = {
         id: newID,
         title: req.title,

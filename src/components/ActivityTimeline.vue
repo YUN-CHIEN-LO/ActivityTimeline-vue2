@@ -22,8 +22,10 @@
           </p>
         </div>
         <div class="card-footer">
-          <button class="btn btn-dark" @click="onEdit(card.id)"> {{options.lables.edit}} </button>
-          <button class="btn btn-danger" @click="onDelete(card.id)"> {{options.lables.delete }} </button>
+          <button class="btn btn-dark" @click="onEdit(card.id)">{{ options.lables.edit }}</button>
+          <button class="btn btn-danger" @click="onDelete(card.id)">
+            {{ options.lables.delete }}
+          </button>
           <p class="card-text text-muted">{{ card.datetime }}</p>
         </div>
       </div>
@@ -56,12 +58,15 @@ export default {
     options: {
       type: Object,
       default: {
+        // 一次顯示多少筆資料
         perItem: 4,
+        // 外觀設定
         lables: {
           loadMoreText: 'Load More',
           edit: 'Edit',
           delete: 'X',
         },
+        // 傳入資料
         data: [],
       },
     },
@@ -69,63 +74,87 @@ export default {
   //#endregion
   //#region === DATA ===
   data() {
+    // 目前顯示資料總長度
     let itemLen = 0;
+    // 目前顯示的資料
     let cards = [];
-    let maxIdstr = '0';
-    let sortType='desc';
+    // 目前排序的方式，初始為降冪
+    let sortType = 'desc';
+
     return {
       itemLen,
       cards,
-      maxIdstr,
-      sortType
+      sortType,
     };
   },
   //#endregion
   //#region === HOOKS ===
   mounted() {
+    // 初始 目前顯示資料總長度
     this.itemLen = this._options.perItem;
+    // 初始 降冪排序
     this.sort(this.sortType);
+    // 初始 渲染
     this.render();
   },
   //#endregion
   computed: {
     _options: {
-      get(){
+      get() {
         return this.options;
       },
-      set(opt){
-      return opt;}
-    }
+      set(opt) {
+        return opt;
+      },
+    },
   },
   //#region === METHODS ===
   methods: {
     //#region Callback函式
-    
+
+    /**
+     * 重設options
+     * @param {Object} options
+     */
     setOpt(options) {
-      
+      // assign
       const assign =
         Object.assign ||
         function assign(target, ...args) {
-          if ( args.length > 0) {
+          if (args.length > 0) {
             args.forEach((arg) => {
-                Object.keys(arg).forEach((key) => {
-                  target[key] = arg[key];
-                });
-              
+              Object.keys(arg).forEach((key) => {
+                target[key] = arg[key];
+              });
             });
           }
 
           return target;
         };
 
-        this._options = this._options = assign({}, this._options, true && options);
-        this.sort(this.sortType);
-        this.render();
+      // 覆蓋options
+      this._options = this._options = assign({}, this._options, true && options);
+      // 重新排序
+      this.sort(this.sortType);
+      // 重新渲染
+      this.render();
     },
+
+    /**
+     * 編輯
+     * @param {String} id
+     */
     onEdit: function (id) {
+      // emmit到母組件
       this.$emit('onEdit', id);
     },
+
+    /**
+     * 編輯
+     * @param {String} id
+     */
     onDelete: function (id) {
+      // emmit到母組件;
       this.$emit('onDelete', id);
     },
     //#endregion
@@ -137,7 +166,6 @@ export default {
      * @param {Object} [card] - (card物件)
      */
     addData: function (card) {
-
       // 新增card資訊進入data
       this._options.data.unshift(card);
 
@@ -145,7 +173,12 @@ export default {
       this.render();
     },
 
+    /**
+     * 編輯卡片
+     * @param {Object} [card] - (card物件)
+     */
     updateData: function (card) {
+      // 找到指定卡片在資料中的位置
       let index = 0;
       this._options.data.forEach((x, i) => {
         if (x.id == card.id) {
@@ -153,13 +186,19 @@ export default {
         }
       });
 
+      // 以新卡片替換舊卡片
       this._options.data.splice(index, 1, card);
 
       // 重新渲染
       this.render();
     },
 
+    /**
+     * 刪除卡片
+     * @param {String} id
+     */
     deleteData: function (id) {
+      // 找到指定卡片在資料中的位置
       let index = 0;
       this._options.data.forEach((x, i) => {
         if (x.id == id) {
@@ -167,6 +206,7 @@ export default {
         }
       });
 
+      // 移除卡片
       this._options.data.splice(index, 1);
 
       // 重新渲染
@@ -184,11 +224,13 @@ export default {
       this.sortType = type;
       switch (type) {
         case 'asc':
+          // 升幂
           _data.sort(function (a, b) {
             return a.id - b.id;
           });
           break;
         case 'desc':
+          // 降冪
           _data.sort(function (a, b) {
             return b.id - a.id;
           });

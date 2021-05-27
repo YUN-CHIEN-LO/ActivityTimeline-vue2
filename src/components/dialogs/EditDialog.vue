@@ -6,6 +6,8 @@
     :title="options.title"
     :cancel-title="options.cancelTitle"
     :ok-title="options.okTitle"
+    :ok-variant="options.okVariant"
+    :cancel-variant="options.cancelVariant"
     :header-class="options.headerClass"
     @show="resetModal"
     @hidden="resetModal"
@@ -81,22 +83,54 @@
 <script>
 export default {
   name: 'EditDialog',
+  //#region === PROPS ===
   props: {
     options: {
       type: Object,
       default: {
+        // DOM Id
         id: 'editModal',
-        title: 'Add Card',
+        // 模式
         mode: 'add',
+        // Modal設定
+        title: 'Add',
+        okTitle: 'Save',
+        cancelTitle: 'Cancel',
+        headerClass: 'odd',
+        okVariant: 'dark',
+        cancelVariant: 'outline-dark',
+        // 自訂label
+        labels: {
+          title: 'Title',
+          name: 'Name',
+          email: 'Email',
+          bref: 'Brief',
+        },
+        // 驗證錯誤訊息
+        invalidFeedback: {
+          title: 'Title cannot be empty.',
+          name: 'Name cannot be empty.',
+          email: 'Wrong email format.',
+        },
+        // 編輯對象
+        editTarget: null,
       },
     },
   },
+  //#endregion PROPS
+  //#region === EMMITS ===
   emmits: {
+    /**
+     * 回傳表單收集到的物件資料
+     */
     ReturnNewData: (Data) => {
       return Data;
     },
   },
+  //#endregion EMMITS
+  //#region === DATA ===
   data() {
+    // 新data物件
     let newData = {
       id: '',
       title: '',
@@ -112,17 +146,28 @@ export default {
     };
     return {
       newData,
+      // 顯示日期
       showDate: '',
     };
   },
+  //#endregion DATA
+  //#region === METHODS ===
   methods: {
+    /**
+     * 驗證表單資訊
+     */
     checkFormValidity(item) {
       const valid = this.$refs[item].checkValidity();
       return valid;
     },
+
+    /**
+     * 重製表單
+     */
     resetModal() {
       switch (this.options.mode) {
         case 'add':
+          // 若模式mode=add，清空表單
           for (const [key, value] of Object.entries(this.newData)) {
             if (key != 'state') {
               this.newData[key] = '';
@@ -132,9 +177,12 @@ export default {
               }
             }
           }
+          // 取得今天日期
           this.showDate = this.$dateFormatSlash(new Date());
           break;
+
         case 'edit':
+          // 若模式mode=edit，清空表單
           for (const [key, value] of Object.entries(this.newData)) {
             if (key != 'state') {
               this.newData[key] = this.options.editTarget[key];
@@ -144,18 +192,27 @@ export default {
               }
             }
           }
+          // 取得物件日期
           this.showDate = this.$dateFormatSlash(this.options.editTarget.datetime);
           break;
+
         default:
           break;
       }
     },
+
+    /**
+     * 處理ok事件
+     */
     handleOk(bvModalEvt) {
-      // Prevent modal from closing
       bvModalEvt.preventDefault();
-      // Trigger submit handler
+      // 觸發 submit handler
       this.handleSubmit();
     },
+
+    /**
+     * 處理 submit 事件
+     */
     handleSubmit() {
       // 驗證表單
       this.newData.state.title = this.checkFormValidity('title');
@@ -164,6 +221,7 @@ export default {
       if (!this.newData.state.title || !this.newData.state.name || !this.newData.state.email) {
         return;
       }
+
       let data = null;
       switch (this.options.mode) {
         case 'add':
@@ -177,7 +235,9 @@ export default {
             bref: this.newData.bref,
           };
           break;
+
         case 'edit':
+          // 建立新Data物件
           data = {
             id: this.newData.id,
             title: this.newData.title,
@@ -187,22 +247,25 @@ export default {
             bref: this.newData.bref,
           };
           break;
+
         default:
           break;
       }
 
-      // 新增data
+      // emmit 要新增的data 到母組件
       this.$emit('ReturnNewData', data);
-      // Hide the modal manually
+
+      // 關閉彈窗
       this.$nextTick(() => {
         this.$bvModal.hide(this.options.id);
       });
     },
   },
+  //#endregion METHODS
 };
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .close {
   background-color: transparent;
   border-radius: 5px;
@@ -216,12 +279,11 @@ export default {
 $oddColor: #22ac38;
 $evenColor: #f8b500;
 .odd {
-    background-color: $oddColor;
-    color: white;
-  }
+  background-color: $oddColor;
+  color: white;
+}
 .even {
-    background-color: $evenColor;
-    color: white;
-  }
-
+  background-color: $evenColor;
+  color: white;
+}
 </style>

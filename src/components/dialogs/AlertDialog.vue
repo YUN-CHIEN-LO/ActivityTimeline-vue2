@@ -18,26 +18,37 @@ export default {
     options: {
       type: Object,
       default: {
+        // DOM Id
         id: 'deleteModal',
-        title: 'Delete',
+        // 模式
         mode: 'delete',
+        // Modal設定
+        title: 'Delete',
         okTitle: 'Delete',
         cancelTitle: 'Cancel',
-        okVariant: 'danger'
+        okVariant: 'danger',
+        body: '',
+        targetId: '',
       },
     },
   },
   methods:{
+    /**
+     * 處理ok事件
+     */
       handleOk(bvModalEvt) {
-      // Prevent modal from closing
       bvModalEvt.preventDefault();
-      // Trigger submit handler
+      // 觸發 submit handler
       this.handleSubmit();
     },
+    
+    /**
+     * 處理 submit 事件
+     */
     handleSubmit() {
-     
+     // emmit 要刪除的Id 到母組件
       this.$emit('ReturnDeleteId', this.options.targetId);
-      // Hide the modal manually
+      // 關閉彈窗
       this.$nextTick(() => {
         this.$bvModal.hide(this.options.id);
       });

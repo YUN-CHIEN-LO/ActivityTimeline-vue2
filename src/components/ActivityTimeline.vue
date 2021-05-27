@@ -98,6 +98,7 @@ export default {
     this.render();
   },
   //#endregion
+  //#region === COMPUTED ===
   computed: {
     _options: {
       get() {
@@ -108,6 +109,7 @@ export default {
       },
     },
   },
+  //#endregion COMPUTED
   //#region === METHODS ===
   methods: {
     //#region Callback函式
